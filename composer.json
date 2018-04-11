@@ -1,6 +1,6 @@
 {
     "name": "yelv123/identify-watch",
-    "description": "identify luxury watacch.more 5000",
+    "description": "identify luxury watch.more 5000",
     "type": "library",
     "require": {
         "php": "^5.6.3",
