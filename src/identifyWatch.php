@@ -1,12 +1,111 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: wanda
- * Date: 2018/4/11
- * Time: 上午11:55
- */
-
+namespace identifyWatch;
+use GuzzleHttp\Client;
 class identifyWatch
 {
+    const BASE_URL = "https://quick-auction.luxurymore.cn/";
+    const ACCESS_TOKEN_URL = "/api/Search/getAccessToken";
+    const SEARCH_URL = "/api/Search/searchWatchByImage";
+    public $appId, $appKey, $secretKey;
+    public $httpClient;
+    public $error = '';
+    public $errorNo = '';
 
+    public function __construct($appId, $appKey, $secretKey)
+    {
+        $this->appId      = $appId;
+        $this->appKey     = $appKey;
+        $this->secretKey  = $secretKey;
+        $this->httpClient = new Client([
+            'base_uri' => self::BASE_URL,
+
+            'timeout' => 10]);
+    }
+
+    public function setAuth()
+    {
+        $accessToken = empty($_SESSION['WATCH_AUTH']) ? [] : $_SESSION['WATCH_AUTH'];
+        if (empty($accessToken) || $accessToken['expiration_time'] - 1000 > time()) {
+            $accessToken            = $this->getAccessToken();
+            $_SESSION['WATCH_AUTH'] = $accessToken;
+        } else {
+            $accessToken = $_SESSION['WATCH_AUTH'];
+        }
+        $this->httpClient = new Client([
+            'base_uri' => self::BASE_URL,
+            'timeout'  => 10,
+            'headers'  => [
+                'appid' => $this->appId,
+                'token' => $accessToken['access_token'],
+            ]
+        ]);
+        return true;
+
+    }
+
+    public function getAccessToken()
+    {
+        try {
+            $timestamp         = time();
+            $signature         = $this->makeSign($timestamp);
+            $data['timestamp'] = $timestamp;
+            $data['signature'] = $signature;
+            $data['appid']     = $this->appId;
+            $response          = $this->httpClient->request('POST', self::ACCESS_TOKEN_URL, ['json' => $data]);
+            $data              = $response->getBody()->getContents();
+            $data              = json_decode($data, true);
+            if ($data['code'] == "200") {
+                return $data['data'];
+            } else {
+                $this->error   = $data['error'];
+                $this->errorNo = $data['errorNo'];
+                return false;
+            }
+        } catch (\Exception $e) {
+            $this->error   = '请求异常';
+            $this->errorNo = 'abnormal request';
+            return false;
+        }
+    }
+
+
+    public function searchWatch($streamFile, $nums = 10)
+    {
+
+        try {
+
+
+            $this->setAuth();
+            $response = $this->httpClient->request('post', self::SEARCH_URL, ['multipart' => [
+                [
+                    'name'     => 'result_nums',
+                    'contents' => $nums
+                ],
+                [
+                    'name'     => 'image',
+                    'contents' => $streamFile,
+                    'filename' => 'image.png'
+                ]
+            ]]);
+            $data     = $response->getBody()->getContents();
+            $data     = json_decode($data, true);
+            if ($data['code'] == "200") {
+                return $data['data'];
+            } else {
+                $this->error   = $data['error'];
+                $this->errorNo = $data['errorNo'];
+                return false;
+            }
+        } catch (\Exception $e) {
+            $this->error   = '请求异常';
+            $this->errorNo = 'abnormal request';
+            return false;
+        }
+
+    }
+
+    private function makeSign($timestamp)
+    {
+        return md5(base64_encode($timestamp . $this->appId . $this->appKey . $this->secretKey));
+    }
 }
