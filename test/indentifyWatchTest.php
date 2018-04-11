@@ -1,8 +1,8 @@
 <?php
 require_once '../vendor/autoload.php';
-$appId="1";
-$appKey="1V2QuRQqCRAPIa2zYKI6mhaGHHbkJEgV";
-$secretKey="GDb0exY20DGwtnjOqYQmfGUT8ZYjzJoF";
+$appId="";
+$appKey="";
+$secretKey="";
 
 $identifyWatch=new identifyWatch\identifyWatch($appId,$appKey,$secretKey);
 $result=$identifyWatch->getAccessToken();
