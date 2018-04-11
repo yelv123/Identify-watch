@@ -1,0 +1,26 @@
+{
+    "name": "yelv123/identify-watch",
+    "description": "identify luxury watacch.more 5000",
+    "type": "library",
+    "require": {
+        "php": "^5.6.3",
+        "guzzlehttp/guzzle": "^6.3.2"
+    },
+    "require-dev": {
+        "php": "^5.6.3 ",
+        "guzzlehttp/guzzle": "^6.3.2"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "yelv123",
+            "email": "swustncgis@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "identifyWatch\\": "src/"
+        }
+    }
+}
