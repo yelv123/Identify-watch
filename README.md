@@ -48,7 +48,10 @@
 |:-----  |:-----|-----                           |
 |access_token |string   |接口票据  |
 |expiration_time |string   |过期时间戳  |
+
+
  **备注** 
+ 
 ```
 //签名算法
 md5(base64_encode($timestamp.$appId.$appkey.$secretkey))
