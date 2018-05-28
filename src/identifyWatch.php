@@ -69,24 +69,45 @@ class identifyWatch
     }
 
 
-    public function searchWatch($streamFile, $nums = 10)
+    public function searchWatch($streamFile=null, $image_url,$nums = 10)
     {
 
         try {
 
 
             $this->setAuth();
-            $response = $this->httpClient->request('post', self::SEARCH_URL, ['multipart' => [
-                [
-                    'name'     => 'result_nums',
-                    'contents' => $nums
-                ],
-                [
-                    'name'     => 'image',
-                    'contents' => $streamFile,
-                    'filename' => 'image.png'
-                ]
-            ]]);
+            if($streamFile==null&&empty($image_url))
+            {
+                $this->error   = '未给图片';
+                $this->errorNo = 'Not to picture';
+                return false;
+            }
+            if($streamFile){
+                $response = $this->httpClient->request('post', self::SEARCH_URL, ['multipart' => [
+                    [
+                        'name'     => 'result_nums',
+                        'contents' => $nums
+                    ],
+                    [
+                        'name'     => 'image',
+                        'contents' => $streamFile,
+                        'filename' => 'image.png'
+                    ]
+                ]]);
+            }
+            else{
+                $response = $this->httpClient->request('post', self::SEARCH_URL, ['multipart' => [
+                    [
+                        'name'     => 'result_nums',
+                        'contents' => $nums
+                    ],
+                    [
+                        'name'     => 'image_url',
+                        'contents' => $image_url
+                    ]
+                ]]);
+            }
+
             $data     = $response->getBody()->getContents();
             $data     = json_decode($data, true);
             if ($data['code'] == "200") {
