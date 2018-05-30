@@ -80,7 +80,8 @@ md5(base64_encode($timestamp.$appId.$appkey.$secretkey))
 
 |参数名|必选|类型|说明|
 |:----    |:---|:----- |-----   |
-|image |是  |文件 |文件   |
+|image |否  |文件 |文件 image  image_url 必有其一  |
+|image_url |否  |string |文件地址 image  image_url 必有其一  |
 | result_nums |是  |string | 获取前几个结果    |
 
 **头：** 
