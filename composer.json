@@ -3,11 +3,11 @@
     "description": "identify luxury watch.more 5000",
     "type": "library",
     "require": {
-        "php": "^5.6.3",
+        "php": ">=5.6.3",
         "guzzlehttp/guzzle": "^6.3.2"
     },
     "require-dev": {
-        "php": "^5.6.3 ",
+        "php": ">=5.6.3 ",
         "guzzlehttp/guzzle": "^6.3.2"
     },
     "license": "MIT",
