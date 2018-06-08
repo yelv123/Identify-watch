@@ -4,8 +4,8 @@ use GuzzleHttp\Client;
 class identifyWatch
 {
     const BASE_URL = "https://quick-auction.luxurymore.cn/";
-    const ACCESS_TOKEN_URL = "/api/Search/getAccessToken";
-    const SEARCH_URL = "/api/Search/searchWatchByImage";
+    const ACCESS_TOKEN_URL = "index.php?s=/api/Search/getAccessToken";
+    const SEARCH_URL = "index.php?s=/api/Search/searchWatchByImage";
     public $appId, $appKey, $secretKey;
     public $httpClient;
     public $error = '';
